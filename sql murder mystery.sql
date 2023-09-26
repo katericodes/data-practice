@@ -116,7 +116,7 @@ id	    name	        license_id	address_number  address_street_name ssn
 -- Query for Witness Reports
 select person.id, person.name, interview.transcript
 from person join interview on person.id = interview.person_id
-where id in (14887, 89906, 16371)
+where id in (14887, 16371)
 /*
 id	name	transcript
 14887	Morty Schapiro	I heard a gunshot and then saw a man run out. He had a "Get Fit Now Gym" bag. The membership number on the bag started with "48Z". Only gold members have those bags. The man got into a car with a plate that included "H42W".
