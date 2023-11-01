@@ -75,3 +75,22 @@ LIMIT 1;
 -- The UK had the highest number of orders, at 5 total orders.
 
 -- 10. What is the average age of customers who made orders in the 'vitamins' product category?
+WITH baskets_vitamins AS ( -- tells us which baskets had vitamins
+  SELECT DISTINCT b.order_id, category
+  FROM baskets b
+  JOIN products p
+  ON b.product_id = p.product_id
+  WHERE category = 'vitamins'
+),
+	customers_vitamins AS ( -- tells us which orders had the bsakets with vitamins and their details
+      SELECT DISTINCT o.customer_id
+      FROM orders o
+      JOIN baskets_vitamins b
+      ON o.order_id = b.order_id
+      WHERE category = 'vitamins'
+) 
+SELECT avg(age) as average_age
+FROM customers_vitamins v
+JOIN customers c
+ON v.customer_id = c.customer_id;
+-- The average age is 32.5.
