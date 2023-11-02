@@ -39,15 +39,15 @@ ORDER By average_balance desc;
 -- North Beach has the highest average account balance with an average of $30,000.00.
 
 -- 6. Which customer has the highest current balance in their accounts?
--- what does 'current' balance mean?? currently interpretting it as total balance but doesn't seem right
+-- current balance is interpreted as the highest amount in any of their accounts separately
 
-SELECT c.FirstName, c.LastName, sum(Balance) AS total_balance
+SELECT c.FirstName, c.LastName, max(Balance) AS highest_balance
 FROM Accounts a
 JOIN Customers c
 ON a.customerID = c.customerID
 GROUP By c.customerID, FirstName,LastName
-ORDER By total_balance desc;
--- Michael Lee has the highest current balance at $60,000.00
+ORDER By highest_balance desc;
+-- Michael Lee has the highest current balance with an account at $50,000.00
 
 -- 7. Which customer has made the most transactions in the Transactions table?
 WITH customer_names AS ( -- pairs the account id with the customer name
@@ -62,21 +62,39 @@ WITH customer_names AS ( -- pairs the account id with the customer name
   ON customer_names.accountID = Transactions.accountID
   GROUP BY FirstName, LastName
   ORDER BY total_transactions desc;
-
-  -- Jane Doe and Alice Johnsons tie for the most transaction, with each person having 4 transactions.
-
-  /* need to check answer
-    | FirstName | LastName | total_transactions |
-    | --------- | -------- | ------------------ |
-    | Jane      | Doe      | 4                  |
-    | Alice     | Johnson  | 4                  |
-    | John      | Doe      | 3                  |
-    | Bob       | Smith    | 3                  |
-    | Michael   | Lee      | 1                  |
-  */
+-- Jane Doe and Alice Johnson tie for the most transactions, with each person having 4 transactions.
 
 -- 8.Which branch has the highest total balance across all of its accounts?
+SELECT b.BranchName, sum(a.Balance) AS total_balance
+FROM Branches b
+JOIN Accounts a
+ON a.BranchID = b.BranchID
+GROUP By b.BranchName
+ORDER By total_balance desc;
+-- North Beach is the branch with the highest total, at $60,000.00
 
 -- 9. Which customer has the highest total balance across all of their accounts, including savings and checking accounts?
+SELECT c.FirstName, c.LastName, sum(Balance) AS total_balance
+FROM Accounts a
+JOIN Customers c
+ON a.customerID = c.customerID
+WHERE a.AccountType in ("Checking", "Savings")
+GROUP By c.customerID, FirstName,LastName
+ORDER By total_balance desc;
+-- Michael Lee has the highest total balance at $60,000.00.
 
 -- 10. Which branch has the highest number of transactions in the Transactions table?
+WITH branch_names AS ( -- connect account ID to branch name)
+  SELECT a.accountID, a.BranchID, b.BranchName
+  FROM Accounts a
+  JOIN Branches b
+  ON a.BranchID = b.BranchID
+  ORDER BY a.accountID
+)
+SELECT b.BranchName, count(*) as total_transactions
+FROM Transactions T
+JOIN branch_names b
+ON b.accountID = T.accountID
+GROUP BY b.BranchName
+Order BY total_transactions desc;
+-- 'Main' branch and 'South Bay' branch were tied with the most total transactions, at 4 transactions each.
