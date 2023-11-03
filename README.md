@@ -18,6 +18,8 @@ Can you analyse the following tables to find out crucial information about your 
 You are a Finance Analyst working for 'The Big Bank'
 You have been tasked with finding out about your customers and their banking behaviour. Examine the accounts they hold and the type of transactions they make to develop greater insight into your customers.
 
-## Challenge 5:
+## Challenge 5: Pub pricing analysis
+You are a Pricing Analyst working for a pub chain called 'Pubs "R" Us'
+You have been tasked with analysing the drinks prices and sales to gain a greater insight into how the pubs in your chain are performing.
 
 ## Challenge 6:
